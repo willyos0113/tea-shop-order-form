@@ -1,6 +1,6 @@
 import "bulma/css/bulma.min.css";
-import { Form } from "./teaShop/Form";
-import { OrderList } from "./teaShop/OrderList";
+import { Form } from "./TeaShop/Form";
+import { OrderList } from "./TeaShop/OrderList";
 
 export const App = () => {
   return (

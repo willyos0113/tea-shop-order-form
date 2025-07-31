@@ -1,3 +1,5 @@
+import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { FC } from "react";
 
 export const OrderList: FC = () => {
@@ -15,7 +17,10 @@ export const OrderList: FC = () => {
             <div className="column is-1">甜度</div>
             <div className="column is-1">冰塊</div>
             <div className="column is-1">數量</div>
-            <div className="column is-1"></div>
+            <div className="column is-auto"></div>
+            <div className="column is-1">
+              <FontAwesomeIcon icon={faSackDollar} />
+            </div>
           </div>
 
           <hr className="my-2" />
