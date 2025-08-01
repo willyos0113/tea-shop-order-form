@@ -1,8 +1,14 @@
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { FC } from "react";
+import { useState, type ChangeEventHandler, type FC } from "react";
+import { Tea } from "./models/Tea";
 
 export const Form: FC = () => {
+  // 1.1. tea 狀態：控制 select 當前選中的值(預設值會鎖住 value)
+  const [tea, setTea] = useState<Tea>(Tea.BLACK_TEA);
+  // 1.2. 處理 select 選項改變：當使用者選擇不同茶種時更新狀態
+  const handleTeaChange: ChangeEventHandler<HTMLSelectElement> = (e) =>
+    setTea(e.target.value as Tea);
   return (
     <>
       {/* 飲料表單 */}
@@ -14,11 +20,13 @@ export const Form: FC = () => {
               <label className="label">茶品</label>
               <div className="control">
                 <div className="select">
-                  <select defaultValue="紅茶">
-                    <option value="紅茶">紅茶</option>
-                    <option value="綠茶">綠茶</option>
-                    <option value="烏龍茶">烏龍茶</option>
-                    <option value="奶茶">奶茶</option>
+                  <select value={tea} onChange={handleTeaChange}>
+                    {/* 1.3. 技巧：Object.entries(enum) + 解構 [k,v] + map() 動態生成 JSX */}
+                    {Object.entries(Tea).map(([k, v]) => (
+                      <option value={v} key={k}>
+                        {v}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
