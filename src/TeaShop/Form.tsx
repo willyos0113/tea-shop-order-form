@@ -1,7 +1,14 @@
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, type ChangeEventHandler, type FC } from "react";
+import {
+  useState,
+  type ChangeEventHandler,
+  type FC,
+  type FocusEventHandler,
+  type MouseEventHandler,
+} from "react";
 import { Tea } from "./models/Tea";
+import { Topping } from "./models/Topping";
 
 export const Form: FC = () => {
   // 1.1. tea 狀態：控制 select 當前選中的值(預設值會鎖住 value)
@@ -9,6 +16,33 @@ export const Form: FC = () => {
   // 1.2. 處理 select 選項改變：當使用者選擇不同茶種時更新狀態
   const handleTeaChange: ChangeEventHandler<HTMLSelectElement> = (e) =>
     setTea(e.target.value as Tea);
+
+  // 2.1. toppings 狀態：控制 checkbox 當前選中的 value (預設為 [])
+  const [toppings, setToppings] = useState<Topping[]>([]);
+  // 2.2. 處理 checkbox 選項改變：當使用者選擇不同茶種時更新狀態
+  const handleToppingsChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (e.target.checked) {
+      setToppings([...toppings, e.target.value as Topping]); // 配料打勾
+    } else {
+      setToppings(toppings.filter((t) => t !== (e.target.value as Topping))); // 配料取消打勾
+    }
+  };
+
+  // 3.1. quantity 狀態：控制 input 當前的 value (預設為 1)
+  const [quantity, setQuantity] = useState<number>(1);
+  // 3.2. 處理加號按鈕按下： quantity + 1 並更新狀態
+  const handleQuantityIncre: MouseEventHandler<HTMLButtonElement> = () =>
+    setQuantity(quantity + 1);
+  // 3.3. 處理減號按鈕按下： quantity - 1 並更新狀態(但不得小於1)
+  const handleQuantityDecre: MouseEventHandler<HTMLButtonElement> = () =>
+    setQuantity(quantity === 1 ? 1 : quantity - 1);
+  // 3.4. 處理 input 框改變： 用 e.target.value 更新狀態
+  const handleQuantityInputChange: ChangeEventHandler<HTMLInputElement> = (e) =>
+    setQuantity(Number(e.target.value));
+  // 3.5. 防止使用者手動輸入 0： 監聽 blur 事件，如 quantity 小於1，則強制設定為1
+  const handleQuantityInputBlur: FocusEventHandler<HTMLInputElement> = () =>
+    setQuantity(quantity < 1 ? 1 : quantity);
+
   return (
     <>
       {/* 飲料表單 */}
@@ -178,24 +212,19 @@ export const Form: FC = () => {
             <div className="field">
               <label className="label">配料</label>
               <div className="control">
-                <label className="checkbox">
-                  <input type="checkbox" style={{ marginRight: "0.3rem" }} />
-                  仙草
-                </label>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  布丁
-                </label>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  黑糖
-                </label>
+                {/* 2.3. 技巧：Object.entries(enum) + 解構 [k,v] + map() 動態生成 JSX */}
+                {Object.entries(Topping).map(([k, v]) => (
+                  <label className="checkbox mr-2" key={k}>
+                    <input
+                      type="checkbox"
+                      value={v}
+                      checked={toppings.includes(v)}
+                      onChange={handleToppingsChange}
+                      style={{ marginRight: "0.3rem" }}
+                    />
+                    {v}
+                  </label>
+                ))}
               </div>
             </div>
 
@@ -204,7 +233,7 @@ export const Form: FC = () => {
               <label className="label">數量</label>
               <div className="field has-addons">
                 <div className="control">
-                  <button className="button">
+                  <button className="button" onClick={handleQuantityDecre}>
                     <span className="icon">
                       <FontAwesomeIcon icon={faMinus} />
                     </span>
@@ -214,13 +243,15 @@ export const Form: FC = () => {
                   <input
                     className="input has-text-centered"
                     type="number"
-                    defaultValue="1"
-                    min="1"
+                    value={quantity}
+                    min={1}
+                    onChange={handleQuantityInputChange}
+                    onBlur={handleQuantityInputBlur}
                     style={{ width: "50px" }}
                   />
                 </div>
                 <div className="control">
-                  <button className="button">
+                  <button className="button" onClick={handleQuantityIncre}>
                     <span className="icon">
                       <FontAwesomeIcon icon={faPlus} />
                     </span>
