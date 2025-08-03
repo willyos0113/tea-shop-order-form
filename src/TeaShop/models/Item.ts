@@ -13,5 +13,5 @@ export interface Item {
   sugar: number;
   ice: number;
   toppings: Topping[];
-  qantity: number;
+  quantity: number;
 }

@@ -1,4 +1,29 @@
 .drink {
+  display: flex;
+  justify-content: center;
   .cup {
+    border-top: 8px solid rgba(0, 0, 0, 0);
+    border-left: 8px solid #adc2eb;
+    border-right: 8px solid #adc2eb;
+    border-bottom: 8px solid #adc2eb;
+    border-bottom-left-radius: 20%;
+    border-bottom-right-radius: 20%;
+    overflow: hidden;
+    .tea {
+      height: 100%;
+      .foam {
+        .top {
+          height: 30px;
+          background-color: rgba(255, 249, 204);
+        }
+        .bottom {
+          height: 25px;
+          background: linear-gradient(
+            rgba(255, 249, 204),
+            rgba(255, 249, 204, 0)
+          );
+        }
+      }
+    }
   }
 }

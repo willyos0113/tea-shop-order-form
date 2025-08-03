@@ -11,6 +11,7 @@ import { Tea } from "./models/Tea";
 import { Topping } from "./models/Topping";
 import { Size } from "./models/Size";
 import { ICE_LEVELS, SUGAR_LEVELS } from "./models/Item";
+import { Drink } from "./Drink";
 
 export const Form: FC = () => {
   // 1.1. tea 狀態：控制 select 當前選中的值(預設值會鎖住 value)
@@ -32,14 +33,14 @@ export const Form: FC = () => {
 
   // sugar 狀態處理
   const sugarArr = Array.from({ length: SUGAR_LEVELS }, (_, i) => i);
-  const [sugar, setSugar] = useState<number>(0); // 預設無糖(0)
+  const [sugar, setSugar] = useState<number>(SUGAR_LEVELS - 5); // 預設無糖(0)
   const handleSugarChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setSugar(Number(e.target.value));
   };
 
   // ice 狀態處理
   const iceArr = Array.from({ length: ICE_LEVELS }, (_, i) => i);
-  const [ice, setIce] = useState<number>(2); // 預設正常(2)
+  const [ice, setIce] = useState<number>(ICE_LEVELS - 2); // 預設正常(2)
   const handleIceChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setIce(Number(e.target.value));
   };
@@ -73,6 +74,12 @@ export const Form: FC = () => {
   return (
     <section className="form">
       <div className="columns is-centered">
+        <div className="column is-8">
+          {/* 視覺化杯子 */}
+          <Drink
+            item={{ tea, withFoam, size, sugar, ice, toppings, quantity }}
+          />
+        </div>
         <div className="column is-8">
           {/* 飲料表單 */}
           <div className="box p-5">
