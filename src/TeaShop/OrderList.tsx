@@ -9,7 +9,9 @@ export const OrderList: FC = () => {
         <div className="column is-8">
           {/* 訂單表頭 */}
           <div className="columns is-mobile has-text-weight-bold is-size-7 mb-2">
-            <div className="column is-2">茶品</div>
+            <div className="column is-1"></div>
+            <div className="column is-1">訂購人</div>
+            <div className="column is-1">茶品</div>
             <div className="column is-1">奶蓋</div>
             <div className="column is-1">配料</div>
             <div className="column is-1">容量</div>

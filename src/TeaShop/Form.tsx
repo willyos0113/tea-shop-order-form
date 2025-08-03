@@ -14,6 +14,12 @@ import { ICE_LEVELS, SUGAR_LEVELS } from "./models/Item";
 import { Drink } from "./Drink";
 
 export const Form: FC = () => {
+  // customer 狀態處理
+  const [customer, setCustomer] = useState<string>("");
+  const handleCustomerChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setCustomer(e.target.value);
+  };
+
   // 1.1. tea 狀態：控制 select 當前選中的值(預設值會鎖住 value)
   const [tea, setTea] = useState<Tea>(Tea.BLACK_TEA);
   // 1.2. 處理 select 選項改變：當使用者選擇不同茶種時更新狀態
@@ -27,20 +33,20 @@ export const Form: FC = () => {
   };
 
   // size 狀態處理
-  const [size, setSize] = useState<Size>(Size.MEDIUM as Size);
+  const [size, setSize] = useState<Size>(Size.LARGE as Size);
   const handleSizeChange: ChangeEventHandler<HTMLInputElement> = (e) =>
     setSize(e.target.value as Size);
 
   // sugar 狀態處理
   const sugarArr = Array.from({ length: SUGAR_LEVELS }, (_, i) => i);
-  const [sugar, setSugar] = useState<number>(SUGAR_LEVELS - 5); // 預設無糖(0)
+  const [sugar, setSugar] = useState<number>(SUGAR_LEVELS - 1); // 預設無糖(0)
   const handleSugarChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setSugar(Number(e.target.value));
   };
 
   // ice 狀態處理
   const iceArr = Array.from({ length: ICE_LEVELS }, (_, i) => i);
-  const [ice, setIce] = useState<number>(ICE_LEVELS - 2); // 預設正常(2)
+  const [ice, setIce] = useState<number>(ICE_LEVELS - 1); // 預設正常(2)
   const handleIceChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setIce(Number(e.target.value));
   };
@@ -71,6 +77,27 @@ export const Form: FC = () => {
   const handleQuantityInputBlur: FocusEventHandler<HTMLInputElement> = () =>
     setQuantity(quantity < 1 ? 1 : quantity);
 
+  // 初始化所有狀態
+  const resetAll = (): void => {
+    setCustomer("");
+    setTea(Tea.BLACK_TEA);
+    setWithFoam(false);
+    setSize(Size.LARGE as Size);
+    setSugar(SUGAR_LEVELS - 1);
+    setIce(ICE_LEVELS - 1);
+    setToppings([]);
+    setQuantity(1);
+  };
+
+  // 清除按鈕事件處理
+  const handleCleanClick: MouseEventHandler<HTMLButtonElement> = () =>
+    resetAll();
+
+  // 新增(Order)按鈕事件處理
+  const handleAddOrderClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+    console.log(e.target);
+  };
+
   return (
     <section className="form">
       <div className="columns is-centered">
@@ -80,9 +107,23 @@ export const Form: FC = () => {
             item={{ tea, withFoam, size, sugar, ice, toppings, quantity }}
           />
         </div>
-        <div className="column is-8">
+        <div className="column is-8 mb-5">
           {/* 飲料表單 */}
           <div className="box p-5">
+            {/* 訂購人 */}
+            <div className="field">
+              <label className="label">訂購人</label>
+              <div className="control">
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="訂購人姓名"
+                  value={customer}
+                  onChange={handleCustomerChange}
+                />
+              </div>
+            </div>
+
             {/* 茶品 */}
             <div className="field">
               <label className="label">茶品</label>
@@ -230,10 +271,17 @@ export const Form: FC = () => {
             {/* 提交/清除按鈕 */}
             <div className="field is-grouped">
               <div className="control">
-                <button className="button is-link">新增</button>
+                <button
+                  className="button is-link"
+                  onClick={handleAddOrderClick}
+                >
+                  新增
+                </button>
               </div>
               <div className="control">
-                <button className="button is-light">清除</button>
+                <button className="button is-light" onClick={handleCleanClick}>
+                  清除
+                </button>
               </div>
             </div>
           </div>
