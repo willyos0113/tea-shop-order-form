@@ -4,9 +4,9 @@ import type { FC } from "react";
 
 export const OrderList: FC = () => {
   return (
-    <section className="order-list container">
+    <section className="order-list">
       <div className="columns is-centered">
-        <div className="column is-8">
+        <div className="column">
           {/* 訂單表頭 */}
           <div className="columns is-mobile has-text-weight-bold is-size-7 mb-2">
             <div className="column is-1"></div>

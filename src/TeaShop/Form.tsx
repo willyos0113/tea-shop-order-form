@@ -101,13 +101,13 @@ export const Form: FC = () => {
   return (
     <section className="form">
       <div className="columns is-centered">
-        <div className="column is-8">
+        <div className="column">
           {/* 視覺化杯子 */}
           <Drink
             item={{ tea, withFoam, size, sugar, ice, toppings, quantity }}
           />
         </div>
-        <div className="column is-8 mb-5">
+        <div className="column mb-5">
           {/* 飲料表單 */}
           <div className="box p-5">
             {/* 訂購人 */}
