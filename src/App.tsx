@@ -5,10 +5,10 @@ import { OrderList } from "./TeaShop/OrderList";
 export const App = () => {
   return (
     <>
-      <div className="section is-max-desktop">
+      <section className="app section is-max-desktop">
         <Form />
         <OrderList />
-      </div>
+      </section>
     </>
   );
 };

@@ -9,6 +9,8 @@ import {
 } from "react";
 import { Tea } from "./models/Tea";
 import { Topping } from "./models/Topping";
+import { Size } from "./models/Size";
+import { ICE_LEVELS, SUGAR_LEVELS } from "./models/Item";
 
 export const Form: FC = () => {
   // 1.1. tea 狀態：控制 select 當前選中的值(預設值會鎖住 value)
@@ -16,6 +18,31 @@ export const Form: FC = () => {
   // 1.2. 處理 select 選項改變：當使用者選擇不同茶種時更新狀態
   const handleTeaChange: ChangeEventHandler<HTMLSelectElement> = (e) =>
     setTea(e.target.value as Tea);
+
+  // withFoam 狀態處理
+  const [withFoam, setWithFoam] = useState<boolean>(false);
+  const handleWithFoamChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setWithFoam(e.target.checked);
+  };
+
+  // size 狀態處理
+  const [size, setSize] = useState<Size>(Size.MEDIUM as Size);
+  const handleSizeChange: ChangeEventHandler<HTMLInputElement> = (e) =>
+    setSize(e.target.value as Size);
+
+  // sugar 狀態處理
+  const sugarArr = Array.from({ length: SUGAR_LEVELS }, (_, i) => i);
+  const [sugar, setSugar] = useState<number>(0); // 預設無糖(0)
+  const handleSugarChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setSugar(Number(e.target.value));
+  };
+
+  // ice 狀態處理
+  const iceArr = Array.from({ length: ICE_LEVELS }, (_, i) => i);
+  const [ice, setIce] = useState<number>(2); // 預設正常(2)
+  const handleIceChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setIce(Number(e.target.value));
+  };
 
   // 2.1. toppings 狀態：控制 checkbox 當前選中的 value (預設為 [])
   const [toppings, setToppings] = useState<Topping[]>([]);
@@ -44,12 +71,12 @@ export const Form: FC = () => {
     setQuantity(quantity < 1 ? 1 : quantity);
 
   return (
-    <>
-      {/* 飲料表單 */}
+    <section className="form">
       <div className="columns is-centered">
         <div className="column is-8">
+          {/* 飲料表單 */}
           <div className="box p-5">
-            {/* 茶品? */}
+            {/* 茶品 */}
             <div className="field">
               <label className="label">茶品</label>
               <div className="control">
@@ -66,48 +93,38 @@ export const Form: FC = () => {
               </div>
             </div>
 
-            {/* 奶蓋? */}
+            {/* 奶蓋 */}
             <div className="field">
               <div className="control">
                 <label className="checkbox">
-                  <input type="checkbox" style={{ marginRight: "0.3rem" }} />
+                  <input
+                    type="checkbox"
+                    checked={withFoam}
+                    onChange={handleWithFoamChange}
+                    style={{ marginRight: "0.3rem" }}
+                  />
                   奶蓋
                 </label>
               </div>
             </div>
 
-            {/* 大小杯? */}
+            {/* 大小杯 */}
             <div className="field">
               <label className="label">容量</label>
               <div className="control">
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="size"
-                    value="小"
-                    defaultChecked
-                    style={{ marginRight: "0.3rem" }}
-                  />
-                  小
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="size"
-                    value="中"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  中
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="size"
-                    value="大"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  大
-                </label>
+                {Object.entries(Size).map(([k, v]) => (
+                  <label className="radio mr-2" key={k}>
+                    <input
+                      type="radio"
+                      name="size"
+                      value={v}
+                      checked={size === v}
+                      onChange={handleSizeChange}
+                      style={{ marginRight: "0.3rem" }}
+                    />
+                    {v}
+                  </label>
+                ))}
               </div>
             </div>
 
@@ -115,100 +132,43 @@ export const Form: FC = () => {
             <div className="field">
               <label className="label">甜度</label>
               <div className="control">
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="sweetness"
-                    value="0"
-                    defaultChecked
-                    style={{ marginRight: "0.3rem" }}
-                  />
-                  0
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="sweetness"
-                    value="1"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  1
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="sweetness"
-                    value="2"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  2
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="sweetness"
-                    value="3"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  3
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="sweetness"
-                    value="4"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  4
-                </label>
+                {sugarArr.map((s) => (
+                  <label className="radio mr-2" key={s}>
+                    <input
+                      type="radio"
+                      name="sweetness"
+                      value={s}
+                      checked={sugar === s}
+                      onChange={handleSugarChange}
+                      style={{ marginRight: "0.3rem" }}
+                    />
+                    {s}
+                  </label>
+                ))}
               </div>
             </div>
 
-            {/* 冰塊? */}
+            {/* 冰塊 */}
             <div className="field">
               <label className="label">冰塊</label>
               <div className="control">
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="ice"
-                    value="0"
-                    defaultChecked
-                    style={{ marginRight: "0.3rem" }}
-                  />
-                  0
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="ice"
-                    value="1"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  1
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="ice"
-                    value="2"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  2
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="ice"
-                    value="3"
-                    style={{ marginRight: "0.3rem", marginLeft: "0.3rem" }}
-                  />
-                  3
-                </label>
+                {iceArr.map((i) => (
+                  <label className="radio mr-2" key={i}>
+                    <input
+                      type="radio"
+                      name="ice"
+                      value={i}
+                      checked={ice === i}
+                      onChange={handleIceChange}
+                      style={{ marginRight: "0.3rem" }}
+                    />
+                    {i}
+                  </label>
+                ))}
               </div>
             </div>
 
-            {/* 配料? */}
+            {/* 配料 */}
             <div className="field">
               <label className="label">配料</label>
               <div className="control">
@@ -228,7 +188,7 @@ export const Form: FC = () => {
               </div>
             </div>
 
-            {/* 幾杯? */}
+            {/* 幾杯 */}
             <div className="field">
               <label className="label">數量</label>
               <div className="field has-addons">
@@ -260,7 +220,7 @@ export const Form: FC = () => {
               </div>
             </div>
 
-            {/* 提交或清除按鈕 */}
+            {/* 提交/清除按鈕 */}
             <div className="field is-grouped">
               <div className="control">
                 <button className="button is-link">新增</button>
@@ -272,6 +232,6 @@ export const Form: FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </section>
   );
 };

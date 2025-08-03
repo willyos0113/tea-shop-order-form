@@ -4,8 +4,7 @@ import type { FC } from "react";
 
 export const OrderList: FC = () => {
   return (
-    <>
-      {/* 訂單明細預覽 */}
+    <section className="order-list container">
       <div className="columns is-centered">
         <div className="column is-8">
           {/* 訂單表頭 */}
@@ -39,6 +38,6 @@ export const OrderList: FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </section>
   );
 };
