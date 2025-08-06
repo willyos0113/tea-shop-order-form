@@ -12,8 +12,13 @@ import { Topping } from "./models/Topping";
 import { Size } from "./models/Size";
 import { ICE_LEVELS, SUGAR_LEVELS } from "./models/Item";
 import { Drink } from "./Drink";
+import type { Order } from "./models/Order";
 
-export const Form: FC = () => {
+interface FormProps {
+  addOrder: (newOrder: Order) => void;
+}
+
+export const Form: FC<FormProps> = ({ addOrder }) => {
   // customer 狀態處理
   const [customer, setCustomer] = useState<string>("");
   const handleCustomerChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -94,8 +99,21 @@ export const Form: FC = () => {
     resetAll();
 
   // 新增(Order)按鈕事件處理
-  const handleAddOrderClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    console.log(e.target);
+  const handleAddOrderClick: MouseEventHandler<HTMLButtonElement> = () => {
+    const newOrder: Order = {
+      customer,
+      tea,
+      withFoam,
+      size,
+      sugar,
+      ice,
+      toppings,
+      quantity,
+      price: 60, // 固定一杯 60 塊
+      id: crypto.randomUUID(), // uuid 原生 API
+    };
+    addOrder(newOrder); // 呼叫父元件函數(更新上一層的狀態)，新增一筆 Order 型態資料
+    resetAll(); // 清空表單
   };
 
   return (

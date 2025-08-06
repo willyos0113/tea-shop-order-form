@@ -1,8 +1,21 @@
-import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faSackDollar,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { FC } from "react";
+import type { Order } from "./models/Order";
 
-export const OrderList: FC = () => {
+interface OrderListProps {
+  orders: Order[];
+  removeOrder: (orderId: string) => void;
+}
+
+export const OrderList: FC<OrderListProps> = ({ orders, removeOrder }) => {
+  const handleRemoveClick = (orderId: string) => () => {
+    removeOrder(orderId);
+  };
   return (
     <section className="order-list">
       <div className="columns is-centered">
@@ -19,15 +32,39 @@ export const OrderList: FC = () => {
             <div className="column is-1">冰塊</div>
             <div className="column is-1">數量</div>
             <div className="column is-auto"></div>
-            <div className="column is-1">
+            <div className="column is-2">
               <FontAwesomeIcon icon={faSackDollar} />
             </div>
           </div>
 
           <hr className="my-2" />
 
-          {/* 訂單項目列表 - 空白狀態 */}
-          <div>{/* 這裡可以放置靜態的示例訂單項目 */}</div>
+          {/* 訂單項目列表(一個 row) */}
+          {orders.map((order) => (
+            <div className="columns is-mobile is-size-7" key={order.id}>
+              <div
+                className="column is-1 has-text-centered"
+                onClick={handleRemoveClick(order.id)}
+                style={{ cursor: "pointer" }}
+              >
+                <FontAwesomeIcon icon={faXmark} style={{ color: "red" }} />
+              </div>
+              <div className="column is-1">{order.customer}</div>
+              <div className="column is-1">{order.tea}</div>
+              <div className="column is-1">
+                {order.withFoam ? (
+                  <FontAwesomeIcon icon={faCheck} style={{ color: "green" }} />
+                ) : null}
+              </div>
+              <div className="column is-1">{order.toppings}</div>
+              <div className="column is-1">{order.size}</div>
+              <div className="column is-1">{order.sugar}</div>
+              <div className="column is-1">{order.ice}</div>
+              <div className="column is-1">{order.quantity}</div>
+              <div className="column is-auto"></div>
+              <div className="column is-2">NT$ {order.price}</div>
+            </div>
+          ))}
 
           {/* 總計 */}
           <div className="has-text-right mt-4">
