@@ -13,9 +13,14 @@ interface OrderListProps {
 }
 
 export const OrderList: FC<OrderListProps> = ({ orders, removeOrder }) => {
+  // 刪除按鈕(由<App>元件傳遞而來)
   const handleRemoveClick = (orderId: string) => () => {
     removeOrder(orderId);
   };
+
+  // 價格加總
+  const totalPrice = (orders: Order[]) =>
+    orders.reduce((total, order) => total + order.price * order.quantity, 0);
   return (
     <section className="order-list">
       <div className="columns is-centered">
@@ -56,7 +61,7 @@ export const OrderList: FC<OrderListProps> = ({ orders, removeOrder }) => {
                   <FontAwesomeIcon icon={faCheck} style={{ color: "green" }} />
                 ) : null}
               </div>
-              <div className="column is-1">{order.toppings}</div>
+              <div className="column is-1">{order.toppings.join(", ")}</div>
               <div className="column is-1">{order.size}</div>
               <div className="column is-1">{order.sugar}</div>
               <div className="column is-1">{order.ice}</div>
@@ -68,7 +73,7 @@ export const OrderList: FC<OrderListProps> = ({ orders, removeOrder }) => {
 
           {/* 總計 */}
           <div className="has-text-right mt-4">
-            <strong>Total: $0</strong>
+            <strong>Total: NT$ {totalPrice(orders)}</strong>
           </div>
 
           {/* 送出按鈕 */}

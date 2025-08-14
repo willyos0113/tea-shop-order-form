@@ -22,8 +22,14 @@ export const Form: FC<FormProps> = ({ addOrder }) => {
   // customer 狀態處理
   const [customer, setCustomer] = useState<string>("");
   const handleCustomerChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    // 清空錯誤訊息
+    if (customerError) {
+      setCustomerError("");
+    }
     setCustomer(e.target.value);
   };
+  // customer 的錯誤訊息
+  const [customerError, setCustomerError] = useState<string>("");
 
   // 1.1. tea 狀態：控制 select 當前選中的值(預設值會鎖住 value)
   const [tea, setTea] = useState<Tea>(Tea.BLACK_TEA);
@@ -100,6 +106,13 @@ export const Form: FC<FormProps> = ({ addOrder }) => {
 
   // 新增(Order)按鈕事件處理
   const handleAddOrderClick: MouseEventHandler<HTMLButtonElement> = () => {
+    // 驗證欄位格式
+    if (!customer.trim()) {
+      setCustomerError("訂購人為必填");
+      return;
+    }
+
+    // 將多個狀態合成一個訂單物件
     const newOrder: Order = {
       customer,
       tea,
@@ -114,6 +127,7 @@ export const Form: FC<FormProps> = ({ addOrder }) => {
     };
     addOrder(newOrder); // 呼叫父元件函數(更新上一層的狀態)，新增一筆 Order 型態資料
     resetAll(); // 清空表單
+    setCustomerError(""); // 清空錯誤訊息
   };
 
   return (
@@ -140,6 +154,9 @@ export const Form: FC<FormProps> = ({ addOrder }) => {
                   onChange={handleCustomerChange}
                 />
               </div>
+              {customerError && (
+                <p className="help is-danger">{customerError}</p>
+              )}
             </div>
 
             {/* 茶品 */}
