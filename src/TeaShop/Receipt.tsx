@@ -1,34 +1,25 @@
-import {
-  faCheck,
-  faSackDollar,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { FC } from "react";
 import type { Order } from "./models/Order";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faSackDollar } from "@fortawesome/free-solid-svg-icons";
 
-interface OrderListProps {
+interface ReceiptProps {
+  orderTime: Date | null;
+  queueNumber: number | null;
   orders: Order[];
-  removeOrder: (orderId: string) => void;
-  placeOrder: () => void;
 }
 
-export const OrderList: FC<OrderListProps> = ({
+export const Receipt: FC<ReceiptProps> = ({
   orders,
-  removeOrder,
-  placeOrder,
+  orderTime,
+  queueNumber,
 }) => {
-  // 刪除按鈕
-  const handleRemoveClick = (orderId: string) => () => {
-    removeOrder(orderId);
-  };
-
   // 價格加總
   const totalPrice = (orders: Order[]) =>
     orders.reduce((total, order) => total + order.price * order.quantity, 0);
 
   return (
-    <div className="order-list">
+    <div className="receipt">
       <div className="columns is-centered">
         <div className="column">
           {/* 訂單表頭 */}
@@ -52,13 +43,7 @@ export const OrderList: FC<OrderListProps> = ({
           {/* 訂單內容 */}
           {orders.map((order) => (
             <div className="columns is-mobile is-size-7" key={order.id}>
-              <div
-                className="column is-1 has-text-centered"
-                onClick={handleRemoveClick(order.id)}
-                style={{ cursor: "pointer" }}
-              >
-                <FontAwesomeIcon icon={faXmark} style={{ color: "red" }} />
-              </div>
+              <div className="column is-1"></div>
               <div className="column is-1">{order.customer}</div>
               <div className="column is-1">{order.tea}</div>
               <div className="column is-1">
@@ -82,11 +67,15 @@ export const OrderList: FC<OrderListProps> = ({
             <strong>合計: NT$ {totalPrice(orders)}</strong>
           </div>
 
-          {/* 送出按鈕 */}
-          <div className="has-text-right mt-4">
-            <button className="button is-link" onClick={() => placeOrder()}>
-              送出
-            </button>
+          {/* 排隊資訊 */}
+          <div className="columns mt-4">
+            <div className="column has-text-centered">
+              <p className="is-size-5">{orderTime?.toLocaleString()}</p>
+              <p className="is-size-5">排隊序號</p>
+              <p className="is-size-3 has-text-weight-bold">
+                {queueNumber?.toString().padStart(4, "0")}
+              </p>
+            </div>
           </div>
         </div>
       </div>

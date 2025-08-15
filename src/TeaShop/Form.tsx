@@ -131,7 +131,7 @@ export const Form: FC<FormProps> = ({ addOrder }) => {
   };
 
   return (
-    <section className="form">
+    <div className="form">
       <div className="columns is-centered">
         <div className="column">
           {/* 視覺化杯子 */}
@@ -322,6 +322,6 @@ export const Form: FC<FormProps> = ({ addOrder }) => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
