@@ -1,6 +1,8 @@
+// 整杯飲料
 .drink {
   display: flex;
   justify-content: center;
+  // 杯子
   .cup {
     border-top: 8px solid rgba(0, 0, 0, 0);
     border-left: 8px solid #adc2eb;
@@ -9,8 +11,17 @@
     border-bottom-left-radius: 20%;
     border-bottom-right-radius: 20%;
     overflow: hidden;
+    // 茶
     .tea {
+      position: relative;
+      display: flex;
+      flex-direction: column;
       height: 100%;
+      // 每塊東東
+      .addon {
+        position: relative;
+      }
+      // 奶蓋
       .foam {
         .top {
           height: 30px;
@@ -23,6 +34,25 @@
             rgba(255, 249, 204, 0)
           );
         }
+      }
+      // 冰塊區塊
+      .ice-layer {
+        // 設定為 absolute 後，長寬會變成不是 100%
+        position: absolute;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        top: 10px;
+      }
+      // 配料區塊
+      .topping-layer {
+        display: flex;
+        flex-grow: 1;
+        flex-wrap: wrap-reverse;
+        align-content: flex-start;
+        justify-content: center;
       }
     }
   }
