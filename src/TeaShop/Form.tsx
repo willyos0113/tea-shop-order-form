@@ -132,7 +132,7 @@ export const Form: FC<FormProps> = ({ addOrder }) => {
 
   return (
     <div className="form">
-      <div className="columns is-centered">
+      <div className="columns is-centered is-vcentered">
         <div className="column">
           {/* 視覺化杯子 */}
           <Drink
