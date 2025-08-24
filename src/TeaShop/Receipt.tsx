@@ -1,19 +1,21 @@
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import type { Order } from "./models/Order";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faSackDollar } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router-dom";
 
-interface ReceiptProps {
-  orderTime: Date | null;
-  queueNumber: number | null;
-  orders: Order[];
-}
+export const Receipt: FC = () => {
+  // 從 URL 取出排隊序號
+  const { orderNumber } = useParams();
+  const ordersJson = sessionStorage.getItem(orderNumber!);
+  if (ordersJson === null)
+    return (
+      <h1 className="is-size-3 has-text-weight-bold">
+        Order number not found!!
+      </h1>
+    );
+  const orders = JSON.parse(ordersJson) as Order[];
 
-export const Receipt: FC<ReceiptProps> = ({
-  orders,
-  orderTime,
-  queueNumber,
-}) => {
   // 價格加總
   const totalPrice = (orders: Order[]) =>
     orders.reduce((total, order) => total + order.price * order.quantity, 0);
@@ -70,11 +72,9 @@ export const Receipt: FC<ReceiptProps> = ({
           {/* 排隊資訊 */}
           <div className="columns mt-4">
             <div className="column has-text-centered">
-              <p className="is-size-5">{orderTime?.toLocaleString()}</p>
+              <p className="is-size-5">{new Date().toLocaleString()}</p>
               <p className="is-size-5">排隊序號</p>
-              <p className="is-size-3 has-text-weight-bold">
-                {queueNumber?.toString().padStart(4, "0")}
-              </p>
+              <p className="is-size-3 has-text-weight-bold">{orderNumber}</p>
             </div>
           </div>
         </div>
