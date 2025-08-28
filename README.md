@@ -1,69 +1,76 @@
-# React + TypeScript + Vite
+# Tea-Shop 點飲料系統說明文件
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 系統概述
 
-Currently, two official plugins are available:
+Tea Shop 是一個基於 React 和 React Router 的飲料點餐系統，採用了現代化的前端技術架構，提供用戶友好的點餐體驗。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 技術架構
 
-## Expanding the ESLint configuration
+### 核心技術
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React**: 主要前端框架
+- **React Router**: 路由管理
+- **TypeScript**: 型別安全
+- **Bulma CSS**: UI 樣式框架
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 組件結構
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+Tea Shop 系統
+├── App (主應用程式)
+└── Router (路由配置)
+    └── TeaShop (主要業務邏輯)
+        ├── Order (點餐頁面)
+        └── Receipt (收據頁面)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 文件結構說明
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### App.tsx
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **功能**: 應用程式入口點
+- **職責**: 初始化 Bulma CSS 樣式並載入路由組件
+
+### Router.tsx
+
+- **功能**: 路由配置與管理
+- **路由結構**:
+  ```
+  / (根路徑)
+  └── TeaShop 組件
+      ├── /order (點餐頁面)
+      └── /receipt/:orderNumber (收據頁面，支援動態參數)
+  ```
+
+## 頁面功能說明
+
+### TeaShop (主頁面)
+
+- 作為整個飲料店的容器組件
+- 包含系統的共用 UI 元素
+- 透過 `<Outlet>` 切換顯示不同的子頁面
+
+### Order (點餐頁面)
+
+- **路徑**: `/order`
+- **功能**: 提供飲料選擇、客製化選項等點餐功能
+- **用戶操作**: 選擇飲料、調整甜度冰塊、下單等
+
+### Receipt (收據頁面)
+
+- **路徑**: `/receipt/:orderNumber`
+- **功能**: 顯示訂單詳細資訊和收據
+- **動態參數**: 支援不同訂單號碼的收據查看
+
+## 系統流程
+
+```mermaid
+graph TD
+    A[用戶進入系統] --> B[TeaShop 主頁面]
+    B --> C[點擊點餐]
+    C --> D[Order 頁面]
+    D --> E[選擇飲料選項]
+    E --> F[確認下單]
+    F --> G[生成訂單號並跳轉到 Receipt 頁面]
+    G --> H[顯示訂單收據]
 ```
